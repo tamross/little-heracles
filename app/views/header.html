@@ -1,0 +1,33 @@
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul ng-if="loggedIn && kind=='CLUBOFFICIAL'" class="nav navbar-nav">
+                    <li ng-class="{active: stateis('app.clubOfficial.register')}">
+                    <a ui-sref="app.clubOfficial.register">Register/Edit Users</a></li>
+                    <li ng-class="{active: stateis('app.clubOfficial.competition')}">
+                    <a ui-sref="app.clubOfficial.competition">Competitions</a></li>
+                    <li ng-class="{active: stateis('app.clubOfficial.results')}">
+                    <a ui-sref="app.clubOfficial.results">Results</a></li>
+                </ul>
+                <ul ng-if="loggedIn && kind==('PARENT' || 'ATHLETE')" class="nav navbar-nav">
+                    <li ng-class="{active: stateis('app.ap.results')}">
+                    <a ui-sref="app.ap.results">Results</a></li>
+                    <li ng-class="{active: stateis('app.ap.competition')}">
+                    <a ui-sref="app.ap.competition">Upcoming Events</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li ng-if="!loggedIn"><a ng-click="openLogin()">
+                    <span class="glyphicon glyphicon-log-in"></span> Login</a>
+                    </li>
+                    <li ng-if="loggedIn">
+                    <a>{{username}}</a>
+                    </li>
+                    <li ng-if="loggedIn">
+                    <a ng-click="logOut()">
+                    <span class="glyphicon glyphicon-log-in"></span> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>         
