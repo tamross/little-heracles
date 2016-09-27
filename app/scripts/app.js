@@ -23,55 +23,56 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
 
             })
-            // .state('app.clubOfficial', {
-            //     url:'/',
-            //     views: {
-            //         'header': {
-            //             templateUrl : 'views/COheader.html',
-            //             controller  : 'HeaderController'
-            //         },
-            //         'content': {
-            //             templateUrl : 'views/home.html',
-            //             controller  : 'HomeController'
-            //         },
-            //         'footer': {
-            //             templateUrl : 'views/footer.html'
-            //         }
-            //     }
-            // })
-            .state('app.clubOfficial.register', {
-                url:'/',
+            .state('app.registerClubOfficial', {
+                url:'register/clubOfficial',
                 views: {
-                    'header': {
-                        templateUrl : 'views/COheader.html',
-                        controller  : 'HeaderController'
-                    },
-                    'content': {
-                        templateUrl : 'views/register.html',
-                        controller  : 'HomeController'
-                    },
-                    'footer': {
-                        templateUrl : 'views/footer.html'
+                    'content@': {
+                        templateUrl : 'views/registerCO.html',
+                        controller  : 'RegisterController'
                     }
                 }
-            })
 
-            // .state('app.ap', {
-            //     url:'/',
-            //     views: {
-            //         'header': {
-            //             templateUrl : 'views/APheader.html',
-            //             controller  : 'HeaderController'
-            //         },
-            //         'content': {
-            //             templateUrl : 'views/home.html',
-            //             controller  : 'HomeController'
-            //         },
-            //         'footer': {
-            //             templateUrl : 'views/footer.html'
-            //         }
-            //     }
-            // });
+            })
+            .state('app.register.ageManager', {
+                url:'/register/ageManager',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/registerAM.html',
+                        controller  : 'RegisterController'
+                    }
+                }
+
+            })
+            .state('app.register.parent', {
+                url:'/register/parent',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/registerP.html',
+                        controller  : 'RegisterController'
+                    }
+                }
+
+            })
+            .state('app.register.athlete', {
+                url:'/register/athlete',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/registerA.html',
+                        controller  : 'RegisterController'
+                    }
+                }
+
+            })
+            .state('app.register.edit', {
+                url:'/register/edit',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/editUser.html',
+                        controller  : 'RegisterController'
+                    }
+                }
+
+            })
             ;
     
         $urlRouterProvider.otherwise('/');

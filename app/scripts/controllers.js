@@ -32,6 +32,7 @@ angular.module('littleHeraclesApp')
 
     $scope.loggedIn = false;
     $scope.username = '';
+    $scope.kind = '';
     
     if(AuthFactory.isAuthenticated()) {
         $scope.loggedIn = true;
@@ -48,17 +49,19 @@ angular.module('littleHeraclesApp')
        AuthFactory.logout();
         $scope.loggedIn = false;
         $scope.username = '';
+        $scope.kind = '';
     };
     
     $rootScope.$on('login:Successful', function () {
         $scope.loggedIn = AuthFactory.isAuthenticated();
         $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
     });
         
-    $rootScope.$on('registration:Successful', function () {
-        $scope.loggedIn = AuthFactory.isAuthenticated();
-        $scope.username = AuthFactory.getUsername();
-    });
+    // $rootScope.$on('registration:Successful', function () {
+    //     $scope.loggedIn = AuthFactory.isAuthenticated();
+    //     $scope.username = AuthFactory.getUsername();
+    // });
     
     $scope.stateis = function(curstate) {
        return $state.is(curstate);  

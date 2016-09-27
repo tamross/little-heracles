@@ -3,12 +3,34 @@
 
             <div id="navbar" class="navbar-collapse collapse">
                 <ul ng-if="loggedIn && kind=='CLUBOFFICIAL'" class="nav navbar-nav">
-                    <li ng-class="{active: stateis('app.clubOfficial.register')}">
-                    <a ui-sref="app.clubOfficial.register">Register/Edit Users</a></li>
+
+                    <!-- <li class="dropdown" uib-dropdown>
+                        <a href="#" class="dropdown-toggle" uib-dropdown-toggle>Register/Edit Users <b class="caret"></b></a>
+                        <ul class="dropdown-menu" uib-dropdown-menu>
+                              <li ng-class="{active: stateis('app.register.clubOfficial')}">
+                                <a ui-sref="app.register.clubOfficial">New Club Official</a></li>
+                                <li ng-class="{active: stateis('app.register.ageManager')}">
+                                <a ui-sref="app.register.ageManager">New Age Manager</a></li>
+                                <li ng-class="{active: stateis('app.register.parent')}">
+                                <a ui-sref="app.register.parent">New Parent</a></li>
+                                <li ng-class="{active: stateis('app.register.athlete')}">
+                                <a ui-sref="app.register.athlete">New Athlete</a></li>
+                                <li ng-class="{active: stateis('app.register.edit')}">
+                                <a ui-sref="app.register.edit">Edit Existing User</a></li>
+                         </ul>
+                    </li> -->
+                    <li ng-class="{active: stateis('app.register.clubOfficial')}">
+                        <a ui-sref="app.registerClubOfficial">New Club Official</a></li>
                     <li ng-class="{active: stateis('app.clubOfficial.competition')}">
                     <a ui-sref="app.clubOfficial.competition">Competitions</a></li>
                     <li ng-class="{active: stateis('app.clubOfficial.results')}">
                     <a ui-sref="app.clubOfficial.results">Results</a></li>
+                </ul>
+                <ul ng-if="loggedIn && kind==('AGEMANAGER')" class="nav navbar-nav">
+                    <li ng-class="{active: stateis('app.ap.results')}">
+                    <a ui-sref="app.ap.results">Results</a></li>
+                    <li ng-class="{active: stateis('app.ap.competition')}">
+                    <a ui-sref="app.ap.competition">Upcoming Events</a></li>
                 </ul>
                 <ul ng-if="loggedIn && kind==('PARENT' || 'ATHLETE')" class="nav navbar-nav">
                     <li ng-class="{active: stateis('app.ap.results')}">
@@ -22,6 +44,9 @@
                     </li>
                     <li ng-if="loggedIn">
                     <a>{{username}}</a>
+                    </li>
+                    <li ng-if="loggedIn">
+                    <a>{{kind}}</a>
                     </li>
                     <li ng-if="loggedIn">
                     <a ng-click="logOut()">
