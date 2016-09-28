@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row row-content">
         <div class="col-xs-12">
-            <h3>Register New Club Official</h3>
-            <form ng-submit="doRegister('CLUBOFFICIAL')">
+            <h3>Register New Age Manager</h3>
+            <form ng-submit="doRegister('AGEMANAGER')">
                 <div class="form-group">
                     <label class="sr-only" for="username">Username</label>
                     <input type="text" class="form-control input-sm" id="username" placeholder="Username" ng-model="registration.username" ng-required="true">
@@ -26,6 +26,12 @@
                 <div class="form-group">
                     <label class="sr-only" for="email">Email</label>
                     <input type="text" class="form-control input-sm" id="email" placeholder="Email" ng-model="registration.email">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="ageGroup">Age Group</label>
+                    <select name="ageGroup" class="form-control input-sm" id="ageGroup" placeholder="Age Group" ng-model="registration.ageGroup" ng-required="true" ng-options="validAgeGroup for validAgeGroup in validAgeGroups">
+                    <option value="">-- Age Group --</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-info btn-sm">Register</button>
             </form>

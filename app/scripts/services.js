@@ -2,8 +2,8 @@
 'use strict';
 
 angular.module('littleHeraclesApp')
-// .constant("baseURL", "https://localhost:3443/")
-.constant("baseURL", "https://localhost:3443/")
+ .constant("baseURL", "https://localhost:3443/")
+//.constant("baseURL", "https://little-heracles-server.au-syd.mybluemix.net/")
 .factory('$localStorage', ['$window', function ($window) {
     return {
         store: function (key, value) {
@@ -24,7 +24,7 @@ angular.module('littleHeraclesApp')
     };
 }])
 
-.factory('AuthFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog', function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
+.factory('AuthFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', function($resource, $http, $localStorage, $rootScope, $window, baseURL){
     
     var authFac = {};
     var TOKEN_KEY = 'Token';
@@ -104,11 +104,6 @@ angular.module('littleHeraclesApp')
         $resource(baseURL + "users")
         .save(registerData,
            function(response) {
-            //   authFac.login({username:registerData.username, password:registerData.password});
-            // if (registerData.rememberMe) {
-            //     $localStorage.storeObject('userinfo',
-            //         {username:registerData.username, password:registerData.password});
-            // }
            
               $rootScope.$broadcast('registration:Successful');
            },
@@ -143,5 +138,20 @@ angular.module('littleHeraclesApp')
     
     return authFac;
     
+}])
+
+.factory('UserFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 
+  function($resource, $http, $localStorage, $rootScope, $window, baseURL){
+    var userFac = {};
+
+    userFac.getParents = function() {
+      return $resource(baseURL + "users/parents", null);
+    }
+
+    userFac.getAthletesInAgeGroup = function() {
+      return $resource(baseURL + "users/athletes/ageGroup/:ageGroup", null);
+    }
+
+    return userFac;
 }])
 ;

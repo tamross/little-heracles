@@ -57,11 +57,6 @@ angular.module('littleHeraclesApp')
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
     });
-        
-    // $rootScope.$on('registration:Successful', function () {
-    //     $scope.loggedIn = AuthFactory.isAuthenticated();
-    //     $scope.username = AuthFactory.getUsername();
-    // });
     
     $scope.stateis = function(curstate) {
        return $state.is(curstate);  
@@ -69,18 +64,27 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('RegisterController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, ngDialog, $localStorage, AuthFactory) {
+.controller('RegisterController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', function ($scope, ngDialog, $localStorage, AuthFactory, UserFactory) {
     
-    $scope.register={};
-    $scope.loginData={};
-    
-    $scope.doRegister = function() {
+    $scope.validAgeGroups = ['u6', 'u7', 'u8', 'u9', 'u10', 'u11', 'u12', 'u13', 'u14', 'u15', 'u16', 'u17'];
+    $scope.showParents = false;
+    $scope.showChildren = false;
+
+    $scope.doRegister = function(kind) {
         console.log('Doing registration', $scope.registration);
-
+        $scope.registration.kind = kind;
+        console.log('Doing registration', $scope.registration);
         AuthFactory.register($scope.registration);
-        
-        ngDialog.close();
-
     };
+
+    $scope.getParents = function() {
+        return UserFactory.getParents();
+    }
+
+    $scope.getAthletesInAgeGroup = function(ageGroup) {
+        return UserFactory.getAthletesInAgeGroup().get({ageGroup:ageGroup})
+    }
+
+    
 }])
 ;

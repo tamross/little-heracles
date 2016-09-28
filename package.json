@@ -1,6 +1,6 @@
 {
-  "name": "little-heracles",
-  "private": true,
+  "name": "little-heracles-client",
+
   "devDependencies": {
     "browser-sync": "^2.10.0",
     "del": "^2.0.2",
@@ -25,7 +25,13 @@
     "karma-phantomjs-launcher": "^0.2.1",
     "phantomjs": "^1.9.19"
   },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
   "engines": {
     "node": ">=0.10.0"
-  }
+  },
+  "license": "UNLICENSED",
+  "description": "little-heracles-client"
 }

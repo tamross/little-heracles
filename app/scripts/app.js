@@ -23,6 +23,16 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
 
             })
+            .state('app.register', {
+                url:'register',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/register.html',
+                        controller  : 'HeaderController'
+                    }
+                }
+
+            })
             .state('app.registerClubOfficial', {
                 url:'register/clubOfficial',
                 views: {
@@ -33,7 +43,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
 
             })
-            .state('app.register.ageManager', {
+            .state('app.registerAgeManager', {
                 url:'/register/ageManager',
                 views: {
                     'content@': {
@@ -43,7 +53,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
 
             })
-            .state('app.register.parent', {
+            .state('app.registerParent', {
                 url:'/register/parent',
                 views: {
                     'content@': {
@@ -53,7 +63,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
 
             })
-            .state('app.register.athlete', {
+            .state('app.registerAthlete', {
                 url:'/register/athlete',
                 views: {
                     'content@': {
@@ -63,7 +73,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
 
             })
-            .state('app.register.edit', {
+            .state('app.registerEdit', {
                 url:'/register/edit',
                 views: {
                     'content@': {
