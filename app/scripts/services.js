@@ -140,6 +140,16 @@ angular.module('littleHeraclesApp')
     
 }])
 
+.factory('AgeGroupFactory', [function () {
+  var ageGroupFac = {};
+
+  ageGroupFac.getValidAgeGroups = function() {
+    return ['u6', 'u7', 'u8', 'u9', 'u10', 'u11', 'u12', 'u13', 'u14', 'u15', 'u16', 'u17'];
+  }
+
+  return ageGroupFac;
+}])
+
 .factory('UserFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
   function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
     var userFac = {};
@@ -153,5 +163,25 @@ angular.module('littleHeraclesApp')
     }
 
     return userFac;
+}])
+
+.factory('CompFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
+  function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
+    var compFac = {};
+
+
+
+    return compFac;
+}])
+
+.factory('EventFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
+  function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
+    var eventFac = {};
+
+    eventFac.getEventsForAgeGroup = function(ageGroup) {
+        return $resource(baseURL + "events/ageGroup/" + ageGroup, null);
+    }
+
+    return eventFac;
 }])
 ;

@@ -63,10 +63,10 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('RegisterController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 
-    function ($scope, $location, ngDialog, $localStorage, AuthFactory, UserFactory) {
+.controller('RegisterController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 'AgeGroupFactory',
+    function ($scope, $location, ngDialog, $localStorage, AuthFactory, UserFactory, AgeGroupFactory) {
     
-    $scope.validAgeGroups = ['u6', 'u7', 'u8', 'u9', 'u10', 'u11', 'u12', 'u13', 'u14', 'u15', 'u16', 'u17'];
+    $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
     $scope.showParents = false;
     $scope.showChildren = false;
 
@@ -81,12 +81,10 @@ angular.module('littleHeraclesApp')
             UserFactory.getParents().query(
                 function(response) {
                     $scope.parents = response;
-                    return $scope.parents;
                 },
                 function(response) {
                     console.log("Error: " + response.status + " " + response.statusText);
                     $scope.message = "Error: " + response.status + " " + response.statusText;
-                    return $scope.message;
                 }
             );
         }
@@ -96,17 +94,44 @@ angular.module('littleHeraclesApp')
         console.log('getting athletes in ' + ageGroup);
             UserFactory.getAthletesInAgeGroup(ageGroup).query(
                 function(response) {
-                    console.log('children are ' + response);
                     $scope.children = response;
-                    return $scope.children;
                 },
                 function(response) {
                     console.log("Error: " + response.status + " " + response.statusText);
                     $scope.message = "Error: " + response.status + " " + response.statusText;
-                    return $scope.message;
                 }
             );
     };
     
+}])
+
+.controller('CompetitionController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
+    function ($scope, $location, ngDialog, $localStorage, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
+
+    $scope.loggedIn = false;
+    $scope.username = '';
+    $scope.kind = '';
+    
+    if(AuthFactory.isAuthenticated()) {
+        $scope.loggedIn = true;
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    }
+
+    $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
+
+    $scope.getEventsForAgeGroup = function(ageGroup) {
+        console.log('getting events in ' + ageGroup);
+        EventFactory.getEventsForAgeGroup(ageGroup).query(
+            function(response) {
+                $scope.events = response;
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
+    };
+
 }])
 ;

@@ -21,67 +21,87 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                         templateUrl : 'views/footer.html'
                     }
                 }
-
             })
             .state('app.register', {
                 url:'register',
                 views: {
                     'content@': {
-                        templateUrl : 'views/register.html',
+                        templateUrl : 'views/users/register.html',
                         controller  : 'HeaderController'
                     }
                 }
-
             })
             .state('app.registerClubOfficial', {
                 url:'register/clubOfficial',
                 views: {
                     'content@': {
-                        templateUrl : 'views/registerCO.html',
+                        templateUrl : 'views/users/registerCO.html',
                         controller  : 'RegisterController'
                     }
                 }
-
             })
             .state('app.registerAgeManager', {
                 url:'/register/ageManager',
                 views: {
                     'content@': {
-                        templateUrl : 'views/registerAM.html',
+                        templateUrl : 'views/users/registerAM.html',
                         controller  : 'RegisterController'
                     }
                 }
-
             })
             .state('app.registerParent', {
                 url:'/register/parent',
                 views: {
                     'content@': {
-                        templateUrl : 'views/registerP.html',
+                        templateUrl : 'views/users/registerP.html',
                         controller  : 'RegisterController'
                     }
                 }
-
             })
             .state('app.registerAthlete', {
                 url:'/register/athlete',
                 views: {
                     'content@': {
-                        templateUrl : 'views/registerA.html',
+                        templateUrl : 'views/users/registerA.html',
                         controller  : 'RegisterController'
                     }
                 }
-
             })
             .state('app.registerEdit', {
                 url:'/register/edit',
                 views: {
                     'content@': {
-                        templateUrl : 'views/editUser.html',
+                        templateUrl : 'views/users/editUser.html',
                         controller  : 'RegisterController'
                     }
                 }
-
+            })
+            .state('app.competitions', {
+                url:'/competitions',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/competitions/competitions.html',
+                        controller  : 'CompetitionController'
+                    }
+                }
+            })
+            .state('app.competitionsCreate', {
+                url:'/competitions/create',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/competitions/createCompetition.html',
+                        controller  : 'CompetitionController'
+                    }
+                }
+            })
+            .state('app.competitionsEdit', {
+                url:'/competitions/edit',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/competitions/editCompetition.html',
+                        controller  : 'CompetitionController'
+                    }
+                }
             })
             ;
     

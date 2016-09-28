@@ -1,0 +1,22 @@
+<div class="container">  
+    <div class="row" ng-if="loggedIn && kind=='CLUBOFFICIAL'">
+        <div class="col-xs-12">
+            <ul>
+                <li><a ui-sref="app.competitionsCreate">Create a new Competition</a></li>
+                <li><a ui-sref="app.competitionsEdit">Edit an existing Competition</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="row row-content">
+        <div class="col-xs-12">
+            <h3>Upcoming Competition</h3>
+        </div>
+    </div>
+    <div class="row row-content">
+        <div class="col-xs-12">
+            <h3>Previous Competitions</h3>
+            <p>show comp details of last competition</p>
+            <a href="#">Show more - paged results??</a>
+        </div>
+    </div>
+</div>
