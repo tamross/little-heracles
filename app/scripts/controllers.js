@@ -63,8 +63,8 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('RegisterController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 
-    function ($scope, ngDialog, $localStorage, AuthFactory, UserFactory) {
+.controller('RegisterController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 
+    function ($scope, $location, ngDialog, $localStorage, AuthFactory, UserFactory) {
     
     $scope.validAgeGroups = ['u6', 'u7', 'u8', 'u9', 'u10', 'u11', 'u12', 'u13', 'u14', 'u15', 'u16', 'u17'];
     $scope.showParents = false;
@@ -73,6 +73,7 @@ angular.module('littleHeraclesApp')
     $scope.doRegister = function(kind) {
         $scope.registration.kind = kind;
         AuthFactory.register($scope.registration);
+        $location.path('/register');
     };
 
     $scope.getParents = function() {
