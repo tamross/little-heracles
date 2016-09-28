@@ -38,7 +38,6 @@ angular.module('littleHeraclesApp')
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
-        console.log("scope kind is" + $scope.kind);
     }
         
     $scope.openLogin = function () {
@@ -64,27 +63,49 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('RegisterController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', function ($scope, ngDialog, $localStorage, AuthFactory, UserFactory) {
+.controller('RegisterController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 
+    function ($scope, ngDialog, $localStorage, AuthFactory, UserFactory) {
     
     $scope.validAgeGroups = ['u6', 'u7', 'u8', 'u9', 'u10', 'u11', 'u12', 'u13', 'u14', 'u15', 'u16', 'u17'];
     $scope.showParents = false;
     $scope.showChildren = false;
 
     $scope.doRegister = function(kind) {
-        console.log('Doing registration', $scope.registration);
         $scope.registration.kind = kind;
-        console.log('Doing registration', $scope.registration);
         AuthFactory.register($scope.registration);
     };
 
     $scope.getParents = function() {
-        return UserFactory.getParents();
-    }
+        if (!$scope.parents) {
+            UserFactory.getParents().query(
+                function(response) {
+                    $scope.parents = response;
+                    return $scope.parents;
+                },
+                function(response) {
+                    console.log("Error: " + response.status + " " + response.statusText);
+                    $scope.message = "Error: " + response.status + " " + response.statusText;
+                    return $scope.message;
+                }
+            );
+        }
+    };
 
     $scope.getAthletesInAgeGroup = function(ageGroup) {
-        return UserFactory.getAthletesInAgeGroup().get({ageGroup:ageGroup})
-    }
-
+        console.log('getting athletes in ' + ageGroup);
+            UserFactory.getAthletesInAgeGroup(ageGroup).query(
+                function(response) {
+                    console.log('children are ' + response);
+                    $scope.children = response;
+                    return $scope.children;
+                },
+                function(response) {
+                    console.log("Error: " + response.status + " " + response.statusText);
+                    $scope.message = "Error: " + response.status + " " + response.statusText;
+                    return $scope.message;
+                }
+            );
+    };
     
 }])
 ;

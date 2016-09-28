@@ -140,16 +140,16 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.factory('UserFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 
-  function($resource, $http, $localStorage, $rootScope, $window, baseURL){
+.factory('UserFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
+  function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
     var userFac = {};
 
     userFac.getParents = function() {
       return $resource(baseURL + "users/parents", null);
     }
 
-    userFac.getAthletesInAgeGroup = function() {
-      return $resource(baseURL + "users/athletes/ageGroup/:ageGroup", null);
+    userFac.getAthletesInAgeGroup = function(ageGroup) {
+      return $resource(baseURL + "users/athletes/ageGroup/" + ageGroup, null);
     }
 
     return userFac;

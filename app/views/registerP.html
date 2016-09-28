@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="row row-content">
+        <div class="col-xs-12">
+            <h3>Register New Parent</h3>
+            <form ng-submit="doRegister('PARENT')">
+                <div class="form-group">
+                    <label class="sr-only" for="username">Username</label>
+                    <input type="text" class="form-control input-sm" id="username" placeholder="Username" ng-model="registration.username" ng-required="true">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="password">Password</label>
+                    <input type="password" class="form-control input-sm" id="password" placeholder="Password" ng-model="registration.password" ng-required="true">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="name">Name</label>
+                    <input type="text" class="form-control input-sm" id="name" placeholder="Name" ng-model="registration.name" ng-required="true">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="address">Address</label>
+                    <input type="text" class="form-control input-sm" id="address" placeholder="Address" ng-model="registration.address">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="phone">Phone</label>
+                    <input type="text" class="form-control input-sm" id="phone" placeholder="Phone" ng-model="registration.phone">
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="email">Email</label>
+                    <input type="text" class="form-control input-sm" id="email" placeholder="Email" ng-model="registration.email">
+                </div>
+                <div class="form-group">
+                    <p>Are children already registered?</p>
+                    <input type="radio" name="childreRegistered" value="true" ng-value="true" ng-model="showChildren">Yes
+                    <input type="radio" name="childrenRegistered" value="false" ng-value="false" ng-model="showChildren">No
+                </div>
+                <div id="linkChildrenNow" class="form-group" ng-show="showChildren">
+                    <label class="sr-only" for="ageGroup">Age Group</label>
+                    <select name="ageGroup" class="form-control input-sm" id="ageGroup" placeholder="Age Group" ng-model="ageGroup" ng-options="validAgeGroup for validAgeGroup in validAgeGroups" ng-click="getAthletesInAgeGroup(ageGroup)">
+                    <option value="">-- Age Group --</option>
+                    </select>
+                    <br>
+                    <label for="children">Children</label>
+                    <select multiple name="children" class="form-control input-sm" id="children" placeholder="Child(ren)" ng-model="registration.children" ng-options="child.name for child in children">
+                    <option value=""></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-info btn-sm">Register</button>
+            </form>
+        </div>
+    </div>
+</div>
