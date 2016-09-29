@@ -120,18 +120,27 @@ angular.module('littleHeraclesApp')
 
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
 
-    $scope.getEventsForAgeGroup = function(ageGroup) {
-        console.log('getting events in ' + ageGroup);
-        EventFactory.getEventsForAgeGroup(ageGroup).query(
-            function(response) {
-                $scope.events = response;
-            },
-            function(response) {
-                console.log("Error: " + response.status + " " + response.statusText);
-                $scope.message = "Error: " + response.status + " " + response.statusText;
+    $scope.events = EventFactory.getEvents().query(
+        function(response) {
+            $scope.events = response;
+        },
+        function(response) {
+            console.log("Error: " + response.status + " " + response.statusText);
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+    );
+
+    $scope.createCompetition = function() {
+        console.log("creating comp");
+        var comp = {date: $scope.competition.date, events: []};
+        for (var i=0; i < $scope.validAgeGroups.length; i++) {
+            var ageGroup = $scope.validAgeGroups[i];
+            if($scope.competition.events[ageGroup]) {
+                comp.events = comp.events.concat($scope.competition.events[ageGroup]);
             }
-        );
-    };
+        }
+        CompFactory.create(comp);
+    }
 
 }])
 ;

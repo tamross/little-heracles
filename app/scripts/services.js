@@ -169,6 +169,28 @@ angular.module('littleHeraclesApp')
   function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
     var compFac = {};
 
+    compFac.create = function(compData) {
+        
+        $resource(baseURL + "competitions")
+        .save(compData,
+           function(response) {
+           
+            
+           },
+           function(response){
+            
+              var message = '\
+                <div class="ngdialog-message">\
+                <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                  '<div><p>' +  response.data.err.message + 
+                  '</p><p>' + response.data.err.name + '</p></div>';
+
+                ngDialog.openConfirm({ template: message, plain: 'true'});
+
+           }
+        
+        );
+    };
 
 
     return compFac;
@@ -177,6 +199,10 @@ angular.module('littleHeraclesApp')
 .factory('EventFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
   function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
     var eventFac = {};
+
+    eventFac.getEvents = function() {
+      return $resource(baseURL + "events", null);
+    }
 
     eventFac.getEventsForAgeGroup = function(ageGroup) {
         return $resource(baseURL + "events/ageGroup/" + ageGroup, null);
