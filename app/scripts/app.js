@@ -41,7 +41,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
             })
             .state('app.registerAgeManager', {
-                url:'/register/ageManager',
+                url:'register/ageManager',
                 views: {
                     'content@': {
                         templateUrl : 'views/users/registerAM.html',
@@ -50,7 +50,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
             })
             .state('app.registerParent', {
-                url:'/register/parent',
+                url:'register/parent',
                 views: {
                     'content@': {
                         templateUrl : 'views/users/registerP.html',
@@ -59,7 +59,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
             })
             .state('app.registerAthlete', {
-                url:'/register/athlete',
+                url:'register/athlete',
                 views: {
                     'content@': {
                         templateUrl : 'views/users/registerA.html',
@@ -68,7 +68,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
             })
             .state('app.registerEdit', {
-                url:'/register/edit',
+                url:'register/edit',
                 views: {
                     'content@': {
                         templateUrl : 'views/users/editUser.html',
@@ -77,16 +77,20 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
             })
             .state('app.competitions', {
-                url:'/competitions',
+                url:'competitions',
                 views: {
                     'content@': {
                         templateUrl : 'views/competitions/competitions.html',
+                        controller  : 'CompetitionController'
+                    },
+                    'competition': {
+                        templateUrl : 'views/competitions/competition.html',
                         controller  : 'CompetitionController'
                     }
                 }
             })
             .state('app.competitionsCreate', {
-                url:'/competitions/create',
+                url:'competitions/create',
                 views: {
                     'content@': {
                         templateUrl : 'views/competitions/createCompetition.html',
@@ -95,10 +99,19 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                 }
             })
             .state('app.competitionsEdit', {
-                url:'/competitions/edit',
+                url:'competitions/edit',
                 views: {
                     'content@': {
                         templateUrl : 'views/competitions/editCompetition.html',
+                        controller  : 'CompetitionController'
+                    }
+                }
+            })
+            .state('app.competition', {
+                url:'competitions/competition/:compId',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/competitions/competition.html',
                         controller  : 'CompetitionController'
                     }
                 }

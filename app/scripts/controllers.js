@@ -21,10 +21,6 @@ angular.module('littleHeraclesApp')
         ngDialog.close();
 
     };
-            
-    $scope.openRegister = function () {
-        ngDialog.open({ template: 'views/register.html', scope: $scope, className: 'ngdialog-theme-default', controller:"RegisterController" });
-    };
     
 }])
 
@@ -69,10 +65,12 @@ angular.module('littleHeraclesApp')
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
     $scope.showParents = false;
     $scope.showChildren = false;
+    $scope.showRegistrationSuccessful = false;
 
     $scope.doRegister = function(kind) {
         $scope.registration.kind = kind;
         AuthFactory.register($scope.registration);
+        $scope.showRegistrationSuccessful = true;
         $location.path('/register');
     };
 
@@ -105,8 +103,8 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('CompetitionController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
-    function ($scope, $location, ngDialog, $localStorage, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
+.controller('CompetitionController', ['$scope', '$stateParams', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
+    function ($scope, $stateParams, $location, ngDialog, $localStorage, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -116,6 +114,21 @@ angular.module('littleHeraclesApp')
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+    }
+
+    // After a competition is created we use the ID to retreive it and view it.
+    $scope.compId = $stateParams.compId;
+    $scope.compToShow = {};
+    if ($scope.compId) {
+        CompFactory.getCompetition($scope.compId).get(
+            function(response) {
+                $scope.compToShow = response;
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
     }
 
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
@@ -132,14 +145,43 @@ angular.module('littleHeraclesApp')
 
     $scope.createCompetition = function() {
         console.log("creating comp");
+
+        var validationMessage = '\
+                    <div class="ngdialog-message">\
+                    <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                      '<p>You must select some events.</p>';
+
         var comp = {date: $scope.competition.date, events: []};
-        for (var i=0; i < $scope.validAgeGroups.length; i++) {
-            var ageGroup = $scope.validAgeGroups[i];
-            if($scope.competition.events[ageGroup]) {
-                comp.events = comp.events.concat($scope.competition.events[ageGroup]);
+        if($scope.competition.events) {
+            for (var i=0; i < $scope.validAgeGroups.length; i++) {
+                var ageGroup = $scope.validAgeGroups[i];
+                if($scope.competition.events[ageGroup]) {
+                    comp.events = comp.events.concat($scope.competition.events[ageGroup]);
+                }
             }
+            if (comp.events != []) {
+                CompFactory.competition().save(comp,
+                     function(response) {
+                        $scope.compId = response.id;
+                        // Display the competition just created
+                        $location.path('/competitions/competition/' + $scope.compId);
+                     },
+                     function(response){
+                      
+                        var message = '\
+                          <div class="ngdialog-message">\
+                          <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                            '<div><p>' +  response.data.err.message + 
+                            '</p><p>' + response.data.err.name + '</p></div>';
+                          ngDialog.openConfirm({ template: message, plain: 'true'});
+                     }
+                    );
+            } else {
+                ngDialog.openConfirm({ template: validationMessage, plain: 'true'});
+            }
+        } else {
+            ngDialog.openConfirm({ template: validationMessage, plain: 'true'});
         }
-        CompFactory.create(comp);
     }
 
 }])

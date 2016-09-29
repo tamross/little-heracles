@@ -24,7 +24,8 @@ angular.module('littleHeraclesApp')
     };
 }])
 
-.factory('AuthFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', function($resource, $http, $localStorage, $rootScope, $window, baseURL){
+.factory('AuthFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
+  function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog) {
     
     var authFac = {};
     var TOKEN_KEY = 'Token';
@@ -156,11 +157,11 @@ angular.module('littleHeraclesApp')
 
     userFac.getParents = function() {
       return $resource(baseURL + "users/parents", null);
-    }
+    };
 
     userFac.getAthletesInAgeGroup = function(ageGroup) {
       return $resource(baseURL + "users/athletes/ageGroup/" + ageGroup, null);
-    }
+    };
 
     return userFac;
 }])
@@ -169,29 +170,13 @@ angular.module('littleHeraclesApp')
   function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
     var compFac = {};
 
-    compFac.create = function(compData) {
-        
-        $resource(baseURL + "competitions")
-        .save(compData,
-           function(response) {
-           
-            
-           },
-           function(response){
-            
-              var message = '\
-                <div class="ngdialog-message">\
-                <div><h3>Competition Creation Unsuccessful</h3></div>' +
-                  '<div><p>' +  response.data.err.message + 
-                  '</p><p>' + response.data.err.name + '</p></div>';
+    compFac.competition = function() {
+      return $resource(baseURL + "competitions", null);
+    }
 
-                ngDialog.openConfirm({ template: message, plain: 'true'});
-
-           }
-        
-        );
-    };
-
+    compFac.getCompetition = function(compId) {
+      return $resource(baseURL + "competitions/" + compId, null);
+    }
 
     return compFac;
 }])
@@ -202,11 +187,11 @@ angular.module('littleHeraclesApp')
 
     eventFac.getEvents = function() {
       return $resource(baseURL + "events", null);
-    }
+    };
 
     eventFac.getEventsForAgeGroup = function(ageGroup) {
         return $resource(baseURL + "events/ageGroup/" + ageGroup, null);
-    }
+    };
 
     return eventFac;
 }])

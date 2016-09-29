@@ -1,0 +1,11 @@
+<div class="container">  
+    <div class="row row-content">
+    <h3>Competition {{compId}}</h3>
+    <p>{{compToShow.date}}</p>
+    <h4>Events</h4>
+    <div ng-repeat="event in compToShow.events">
+    	<p>{{event.ageGroup}}</p>
+    	<p>{{event.name}}</p>
+    </div>
+    </div>
+</div>

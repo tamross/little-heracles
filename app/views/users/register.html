@@ -1,13 +1,16 @@
 <div class="container">  
     <div class="row row-content">
         <div class="col-xs-12">
+            <p ng-show="showRegistrationSuccessful">
+                Registration of user was successful.
+            </p>
             <h3>Register or Edit Users</h3>
             <ul>
-                <li><a ui-sref="app.registerClubOfficial">New Club Official</a></li>
-                <li><a ui-sref="app.registerAgeManager">New Age Manager</a></li>
-                <li><a ui-sref="app.registerParent">New Parent</a></li>
-                <li><a ui-sref="app.registerAthlete">New Athlete</a></li>
-                <li><a ui-sref="app.registerEdit">Edit Existing User</a></li>
+                <li><a ui-sref="app.registerClubOfficial" onclick="showRegistrationSuccesful=false">New Club Official</a></li>
+                <li><a ui-sref="app.registerAgeManager" onclick="showRegistrationSuccesful=false">New Age Manager</a></li>
+                <li><a ui-sref="app.registerParent" onclick="showRegistrationSuccesful=false">New Parent</a></li>
+                <li><a ui-sref="app.registerAthlete" onclick="showRegistrationSuccesful=false">New Athlete</a></li>
+                <li><a ui-sref="app.registerEdit" onclick="showRegistrationSuccesful=false">Edit Existing User</a></li>
             </ul>
         </div>
     </div>
