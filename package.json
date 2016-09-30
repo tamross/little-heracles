@@ -1,8 +1,7 @@
 {
   "name": "little-heracles-client",
-
   "devDependencies": {
-    "browser-sync": "^2.10.0",
+    "browser-sync": "2.9.1",
     "del": "^2.0.2",
     "gulp": "^3.9.0",
     "gulp-cache": "^0.4.0",
@@ -33,5 +32,9 @@
     "node": ">=0.10.0"
   },
   "license": "UNLICENSED",
-  "description": "little-heracles-client"
+  "description": "little-heracles-client",
+  "dependencies": {
+    "angular-moment": "^1.0.0-beta.6",
+    "moment": "^2.15.1"
+  }
 }

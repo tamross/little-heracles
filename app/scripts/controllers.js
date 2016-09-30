@@ -103,8 +103,8 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('CompetitionController', ['$scope', '$stateParams', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
-    function ($scope, $stateParams, $location, ngDialog, $localStorage, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
+.controller('CompetitionController', ['$scope', '$stateParams', '$location', 'ngDialog', '$localStorage', '$moment', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
+    function ($scope, $stateParams, $location, ngDialog, $localStorage, $moment, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -130,6 +130,20 @@ angular.module('littleHeraclesApp')
             }
         );
     }
+
+    // The next upcoming competition
+    $scope.nextComp = {};
+    CompFactory.getCompetitionByDate(new Date()).get(
+            function(response) {
+                console.log("getting next competition");
+                $scope.nextComp = response;
+                $scope.showNextComp = true;
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
 
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
 
@@ -182,7 +196,73 @@ angular.module('littleHeraclesApp')
         } else {
             ngDialog.openConfirm({ template: validationMessage, plain: 'true'});
         }
-    }
+    };
 
 }])
+
+.controller('ResultsController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 'AgeGroupFactory', 'CompFactory', 'ResultFactory',
+    function ($scope, $location, ngDialog, $localStorage, AuthFactory, UserFactory, AgeGroupFactory, CompFactory, ResultFactory) {
+    $scope.loggedIn = false;
+    $scope.username = '';
+    $scope.kind = '';
+    
+    if(AuthFactory.isAuthenticated()) {
+        $scope.loggedIn = true;
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    }
+
+    $scope.showCreationSuccessful = false;
+    $scope.createdResultId = ''; // This will contain the id of the last successfully created result so we can link to view it.
+
+    $scope.attempts = {};
+
+    $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
+    $scope.currentAgeGroup = "";
+    $scope.currentAthlete = {};
+
+    $scope.currentCompetition = {};
+    $scope.competitions = CompFactory.competitions.query(
+            function(response) {
+                $scope.competitions = response;
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
+
+    $scope.saveResult = function() {
+        var max = Math.max($scope.attempts.attempt1, $scope.attempts.attempt3, $scope.attempts.attempt3);
+        var result = {
+            "athlete": $scope.currentAthlete._id,
+            "event": $scope.currentEvent._id,
+            "competition": $scope.currentCompetition._id,
+            "distances": [$scope.attempts.attempt1, $scope.attempts.attempt3, $scope.attempts.attempt3],
+            "bestDistance": max
+        };
+        ResultFactory.results.save(result,
+             function(response) {
+
+                // $location.path('results/comp/' + $scope.currentCompetition._id + "/ageGropup/" + $scope.currentAgeGroup);
+
+                $scope.createResultId = response.id;
+                $scope.showCreationSuccessful = true;
+
+                // Clear the result
+                $scope.attempts = {};
+                $scope.currentAthlete = {};
+             },
+             function(response){
+              
+                var message = '\
+                  <div class="ngdialog-message">\
+                  <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                    '<div><p>' +  response.data.err.message + 
+                    '</p><p>' + response.data.err.name + '</p></div>';
+                  ngDialog.openConfirm({ template: message, plain: 'true'});
+             });
+    };
+
+}])    
 ;

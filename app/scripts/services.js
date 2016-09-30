@@ -146,7 +146,7 @@ angular.module('littleHeraclesApp')
 
   ageGroupFac.getValidAgeGroups = function() {
     return ['u6', 'u7', 'u8', 'u9', 'u10', 'u11', 'u12', 'u13', 'u14', 'u15', 'u16', 'u17'];
-  }
+  };
 
   return ageGroupFac;
 }])
@@ -172,11 +172,15 @@ angular.module('littleHeraclesApp')
 
     compFac.competition = function() {
       return $resource(baseURL + "competitions", null);
-    }
+    };
 
     compFac.getCompetition = function(compId) {
       return $resource(baseURL + "competitions/" + compId, null);
-    }
+    };
+
+    compFac.getCompetitionByDate = function(date) {
+      return $resource(baseURL + "competitions/date/" + date, null);
+    };
 
     return compFac;
 }])
@@ -195,4 +199,16 @@ angular.module('littleHeraclesApp')
 
     return eventFac;
 }])
+
+.factory('ResultFactory', ['$resource', '$http', '$localStorage', '$rootScope', '$window', 'baseURL', 'ngDialog',
+  function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
+    var resultFac = {};
+
+    resultFac.results = function() {
+      return $resource(baseURL + "results", null);
+    };
+
+    return resultFac;
+}])
+
 ;

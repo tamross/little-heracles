@@ -1,0 +1,48 @@
+<div class="container">  
+    <div class="row row-content">
+        <p ng-show="showCreationSuccessful">
+            Result was saved. <a href="view/{{createdResultId}}">View result</a>
+        </p>
+	    <h3>Results Entry</h3>
+	    <form ng-submit="saveResult()">
+	    	<div class="form-group">
+                <label class="sr-only" for="competition">Competition</label>
+                <select name="competition" class="form-control input-sm" id="competition" placeholder="Competition" ng-model="currentcompetition" ng-required="true" ng-options="competition in competitions">
+                <option value="">-- Competition --</option>
+                </select>
+            </div>
+            <div class="form-group">
+            	<label class="sr-only" for="ageGroup">Age Group</label>
+                <select name="ageGroup" class="form-control input-sm" id="ageGroup" placeholder="Age Group" ng-model="currentAgeGroup" ng-options="validAgeGroup for validAgeGroup in validAgeGroups">
+                <option value="">-- Age Group --</option>
+                </select>
+            </div>
+            <div class="form-group">
+            	<label class="sr-only" for="event">Event</label>
+                <select name="event" class="form-control input-sm" id="event" placeholder="Event" ng-model="currentEvent" ng-options="event in currentcomptition.events">
+                <option value="">-- Event --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="sr-only" for="athlete">Athlete</label>
+                <select name="event" class="form-control input-sm" id="athlete" placeholder="Athlete" ng-model="currentAthlete" ng-options="athlete in athletes">
+                <option value="">-- Athlete --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+            	<label class="sr-only" for="jump1">Attempt 1</label>
+                    <input type="number" class="form-control input-sm" id="jump1" placeholder="Attempt 1" ng-model="attempts.attempt1" ng-required="true"> cm
+                <br>
+                <label class="sr-only" for="jump2">Attempt 2</label>
+                    <input type="number" class="form-control input-sm" id="jump2" placeholder="Attempt 2" ng-model="attempts.attempt2" ng-required="true"> cm
+                <br>
+                <label class="sr-only" for="jump3">Attempt 3</label>
+                    <input type="number" class="form-control input-sm" id="jump3" placeholder="Attempt 3" ng-model="attempts.attempt3" ng-required="true"> cm
+                <br>
+            </div>
+
+            <button type="submit" class="btn btn-info btn-sm">Save Result</button>
+	    </form>
+    </div>
+</div>

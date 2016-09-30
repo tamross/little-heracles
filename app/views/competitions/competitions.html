@@ -7,10 +7,14 @@
             </ul>
         </div>
     </div>
-    <div class="row row-content">
+    <div class="row row-content" ng-show="showNextComp">
         <div class="col-xs-12">
-            <h3>Upcoming Competition</h3>
-            <div ui-view="competition"></div>
+        <h3>Upcoming Competition: {{nextComp.date | date:'dd-MM-yyyy'}}</h3>
+        <button type="button" class="btn btn-info">Record results for this competition</button>
+        <h4>Events</h4>
+        <div ng-repeat="event in nextComp.events | orderBy: 'ageGroup'">
+            <p>{{event.ageGroup}}, {{event.name}}</p>
+        </div>
         </div>
     </div>
     <div class="row row-content">

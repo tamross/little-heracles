@@ -1,10 +1,9 @@
 /*jslint node: true */
 'use strict';
 
-angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
-.config(function($stateProvider, $urlRouterProvider) {
-        $stateProvider
-        
+angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog', 'angular-momentjs'])
+.config(function($stateProvider, $urlRouterProvider, $momentProvider) {
+        $stateProvider  
             // route for the home page
             .state('app', {
                 url:'/',
@@ -116,8 +115,28 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'])
                     }
                 }
             })
+            .state('app.results', {
+                url:'results',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/results/results.html',
+                        controller  : 'ResultsController'
+                    }
+                }
+            })
+            .state('app.viewResult', {
+                url:'results/view/:resultId',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/results/viewResult.html',
+                        controller  : 'ResultsController'
+                    }
+                }
+            })
             ;
     
         $urlRouterProvider.otherwise('/');
+
+        $momentProvider.asyncLoading(false).scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
     })
 ;
