@@ -1,5 +1,9 @@
 <div class="container">  
     <div class="row row-content">
-    <h3>TODO</h3>
+	    <h3>Result for {{resultToShow.event.name}} on {{resultToShow.competition.date}}</h3>
+	    <p>Best result: {{resultToShow.bestDistance}}</p>
+	    <div ng-repeat="distance in resultToShow.distances track by $index">
+	    	<p>{{distance}}</p>
+	    </div>
     </div>
 </div>

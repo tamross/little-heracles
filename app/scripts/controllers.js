@@ -135,7 +135,7 @@ angular.module('littleHeraclesApp')
     $scope.nextComp = {};
     CompFactory.getCompetitionByDate(new Date()).get(
             function(response) {
-                console.log("getting next competition");
+                console.log("got next competition");
                 $scope.nextComp = response;
                 $scope.showNextComp = true;
             },
@@ -174,7 +174,7 @@ angular.module('littleHeraclesApp')
                 }
             }
             if (comp.events != []) {
-                CompFactory.competition().save(comp,
+                CompFactory.competitions().save(comp,
                      function(response) {
                         $scope.compId = response.id;
                         // Display the competition just created
@@ -200,8 +200,8 @@ angular.module('littleHeraclesApp')
 
 }])
 
-.controller('ResultsController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 'AgeGroupFactory', 'CompFactory', 'ResultFactory',
-    function ($scope, $location, ngDialog, $localStorage, AuthFactory, UserFactory, AgeGroupFactory, CompFactory, ResultFactory) {
+.controller('ResultsController', ['$scope', '$stateParams', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 'AgeGroupFactory', 'CompFactory', 'ResultFactory',
+    function ($scope, $stateParams, $location, ngDialog, $localStorage, AuthFactory, UserFactory, AgeGroupFactory, CompFactory, ResultFactory) {
     $scope.loggedIn = false;
     $scope.username = '';
     $scope.kind = '';
@@ -220,10 +220,12 @@ angular.module('littleHeraclesApp')
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
     $scope.currentAgeGroup = "";
     $scope.currentAthlete = {};
+    $scope.athletes = [];
 
     $scope.currentCompetition = {};
-    $scope.competitions = CompFactory.competitions.query(
+    $scope.competitions = CompFactory.competitions().query(
             function(response) {
+                console.log("got competitions " + response);
                 $scope.competitions = response;
             },
             function(response) {
@@ -233,20 +235,22 @@ angular.module('littleHeraclesApp')
         );
 
     $scope.saveResult = function() {
-        var max = Math.max($scope.attempts.attempt1, $scope.attempts.attempt3, $scope.attempts.attempt3);
+        console.log("Saving result ");
+        var max = Math.max($scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3);
         var result = {
             "athlete": $scope.currentAthlete._id,
             "event": $scope.currentEvent._id,
             "competition": $scope.currentCompetition._id,
-            "distances": [$scope.attempts.attempt1, $scope.attempts.attempt3, $scope.attempts.attempt3],
+            "distances": [$scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3],
             "bestDistance": max
         };
-        ResultFactory.results.save(result,
+        ResultFactory.results().save(result,
              function(response) {
 
                 // $location.path('results/comp/' + $scope.currentCompetition._id + "/ageGropup/" + $scope.currentAgeGroup);
 
-                $scope.createResultId = response.id;
+                $scope.createdResultId = response.id;
+                console.log("$scope.createdResultId " + $scope.createdResultId);
                 $scope.showCreationSuccessful = true;
 
                 // Clear the result
@@ -263,6 +267,34 @@ angular.module('littleHeraclesApp')
                   ngDialog.openConfirm({ template: message, plain: 'true'});
              });
     };
+
+    $scope.getAthletesInAgeGroup = function(ageGroup) {
+        console.log('getting athletes in ' + ageGroup);
+            UserFactory.getAthletesInAgeGroup(ageGroup).query(
+                function(response) {
+                    $scope.athletes = response;
+                },
+                function(response) {
+                    console.log("Error: " + response.status + " " + response.statusText);
+                    $scope.message = "Error: " + response.status + " " + response.statusText;
+                }
+            );
+    };
+
+    // After a competition is created we use the ID to retreive it and view it.
+    $scope.resultId = $stateParams.resultId;
+    $scope.resultToShow = {};
+    if ($scope.resultId) {
+        ResultFactory.getResult($scope.resultId).get(
+            function(response) {
+                $scope.resultToShow = response;
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
+    }
 
 }])    
 ;

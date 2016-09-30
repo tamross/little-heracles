@@ -170,7 +170,7 @@ angular.module('littleHeraclesApp')
   function($resource, $http, $localStorage, $rootScope, $window, baseURL, ngDialog){
     var compFac = {};
 
-    compFac.competition = function() {
+    compFac.competitions = function() {
       return $resource(baseURL + "competitions", null);
     };
 
@@ -206,6 +206,10 @@ angular.module('littleHeraclesApp')
 
     resultFac.results = function() {
       return $resource(baseURL + "results", null);
+    };
+
+    resultFac.getResult = function(resultId) {
+      return $resource(baseURL + "results/" + resultId, null);
     };
 
     return resultFac;
