@@ -163,6 +163,10 @@ angular.module('littleHeraclesApp')
       return $resource(baseURL + "users/athletes/ageGroup/" + ageGroup, null);
     };
 
+    userFac.personalBests = function(athleteId) {
+      return $resource(baseURL + "users/athletes/personalBests/" + athleteId, null);
+    }
+
     return userFac;
 }])
 
@@ -206,6 +210,10 @@ angular.module('littleHeraclesApp')
 
     resultFac.results = function() {
       return $resource(baseURL + "results", null);
+    };
+
+    resultFac.clubRecords = function() {
+      return $resource(baseURL + "clubRecords", null, {'update':{method:'PUT' }});
     };
 
     resultFac.getResult = function(resultId) {

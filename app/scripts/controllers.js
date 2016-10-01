@@ -234,39 +234,16 @@ angular.module('littleHeraclesApp')
             }
         );
 
-    $scope.saveResult = function() {
-        console.log("Saving result ");
-        var max = Math.max($scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3);
-        var result = {
-            "athlete": $scope.currentAthlete._id,
-            "event": $scope.currentEvent._id,
-            "competition": $scope.currentCompetition._id,
-            "distances": [$scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3],
-            "bestDistance": max
-        };
-        ResultFactory.results().save(result,
-             function(response) {
-
-                // $location.path('results/comp/' + $scope.currentCompetition._id + "/ageGropup/" + $scope.currentAgeGroup);
-
-                $scope.createdResultId = response.id;
-                console.log("$scope.createdResultId " + $scope.createdResultId);
-                $scope.showCreationSuccessful = true;
-
-                // Clear the result
-                $scope.attempts = {};
-                $scope.currentAthlete = {};
-             },
-             function(response){
-              
-                var message = '\
-                  <div class="ngdialog-message">\
-                  <div><h3>Competition Creation Unsuccessful</h3></div>' +
-                    '<div><p>' +  response.data.err.message + 
-                    '</p><p>' + response.data.err.name + '</p></div>';
-                  ngDialog.openConfirm({ template: message, plain: 'true'});
-             });
-    };
+    $scope.clubRecords = [];
+    $scope.clubRecords = ResultFactory.clubRecords().query(
+        function(response) {
+                $scope.clubRecords = response;
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
 
     $scope.getAthletesInAgeGroup = function(ageGroup) {
         console.log('getting athletes in ' + ageGroup);
@@ -294,7 +271,100 @@ angular.module('littleHeraclesApp')
                 $scope.message = "Error: " + response.status + " " + response.statusText;
             }
         );
-    }
+    };
+
+        $scope.saveResult = function() {
+        console.log("Saving result ");
+        var max = Math.max($scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3);
+        var result = {
+            "athlete": $scope.currentAthlete._id,
+            "event": $scope.currentEvent._id,
+            "competition": $scope.currentCompetition._id,
+            "distances": [$scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3],
+            "bestDistance": max
+        };
+
+        //See if it is a personal bext for the athlete
+        var existingPb = {"eventName": $scope.currentEvent.name, "distance":0};
+        if ($scope.currentAthlete.personalBests == null) {
+            // Handle accidental nulls in the database
+            $scope.currentAthlete.personalBests = [];
+        }
+        for (var i=0; i < $scope.currentAthlete.personalBests.length; i++) {
+            var pb = $scope.currentAthlete.personalBests[i];
+            if (pb.eventName == $scope.currentEvent.name) {
+                console.log("PB for " + pb.eventName + " is " + pb.distance);
+                existingPb = {"eventName": pb.eventName, "distance": pb.distance};
+            };
+        }
+        if (max > existingPb.distance) {
+            var message = '\
+                  <div class="ngdialog-message">\
+                  <div><p>This is a new personal best for ' + $scope.currentAthlete.name + '!</p>\
+                  <p>Previous PB: ' + existingPb + ', new PB: ' + max + '</p></div>';
+                  ngDialog.openConfirm({ template: message, plain: 'true'});
+        } else if (max == existingPb.distance) {
+            var message = '\
+                  <div class="ngdialog-message">\
+                  <div><p>' + $scope.currentAthlete.name + ' has matched their personal best!</p></div>';
+                  ngDialog.openConfirm({ template: message, plain: 'true'});
+        }
+
+        ResultFactory.results().save(result,
+             function(response) {
+                $scope.createdResultId = response.id;
+                console.log("$scope.createdResultId " + $scope.createdResultId);
+                $scope.showCreationSuccessful = true;
+
+                // If it's a new PB replace the old PB on the user
+                    if (max > existingPb.distance) {
+                        console.log("should be updating the list of pbs");
+                        if (existingPb.distance == 0) {
+                            // It's a brand new event PB
+                            existingPb.distance = max;
+                            $scope.currentAthlete.personalBests.push(existingPb);
+                        } else {
+                            // Need to update the existing one 
+                            for (var i=0; i < $scope.currentAthlete.personalBests.length; i++) {
+                                var pb = $scope.currentAthlete.personalBests[i];
+                                if (pb.eventName == $scope.currentEvent.name) {
+                                    $scope.currentAthlete.personalBests[i].distance = max;
+                                }
+                            }
+                        }
+                        var pbsToSave = {"personalBests": $scope.currentAthlete.personalBests};
+                        console.log("athlete id " + $scope.currentAthlete._id);
+                        UserFactory.personalBests($scope.currentAthlete._id).save(pbsToSave,
+                             function(response) {
+                                console.log("Success saving PBs");
+                             },
+                             function(response){
+                              
+                                var message = '\
+                                  <div class="ngdialog-message">\
+                                  <div><h3>Saving Personal Bests Unsuccessful</h3></div>' +
+                                    '<div><p>' +  response.data.err.message + 
+                                    '</p><p>' + response.data.err.name + '</p></div>';
+                                  ngDialog.openConfirm({ template: message, plain: 'true'});
+                             }
+                        );
+                    }
+
+
+                // Clear the result
+                $scope.attempts = {};
+                $scope.currentAthlete = {};
+             },
+             function(response){
+              
+                var message = '\
+                  <div class="ngdialog-message">\
+                  <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                    '<div><p>' +  response.data.err.message + 
+                    '</p><p>' + response.data.err.name + '</p></div>';
+                  ngDialog.openConfirm({ template: message, plain: 'true'});
+             });
+    };
 
 }])    
 ;
