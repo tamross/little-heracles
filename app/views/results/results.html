@@ -1,9 +1,15 @@
 <div class="container">  
-	<div class="row row-content" ng-if="loggedIn && kind==('PARENT' || 'CLUBOFFICIAL' || 'AGEMANAGER')">
-	    <a ui-sref="app.resultsEntry" class="btn btn-Success" role="button">Record Results</a>
+	<div class="row row-content" ng-if="loggedIn && (kind=='PARENT' || kind=='CLUBOFFICIAL' || kind=='AGEMANAGER')">
+	    <a ui-sref="app.resultsEntry" class="btn btn-success" role="button">Record Results</a>
     </div>
-    <div class="row row-content" ng-if="loggedIn && kind==('PARENT' || 'ATHLETE')">
+    <div class="row row-content" ng-if="loggedIn && kind=='ATHLETE'">
 	    <h3>Personal Bests</h3>
+	    <div ng-repeat="personalBest in personalBests">
+            <p>{{personalBest.eventName}}, {{personalBest.distance}}</p>
+        </div>
+    </div>
+    <div class="row row-content" ng-if="loggedIn && kind=='PARENT'">
+	    <h3>Personal Bests for each child</h3>
 	    <p>Coming soon...</p>
     </div>
 </div>

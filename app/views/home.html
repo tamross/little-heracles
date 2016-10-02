@@ -19,23 +19,29 @@
             <h3>Little Heracles - Little Athletics Results</h3>
             <h4>Club Records</h4>
             <p>Coming soon...</p>
+        </div>
     </div>
     <div class="row row-content" ng-if="loggedIn && kind==('AGEMANAGER')">
         <div class="col-xs-12">
             <h3>Little Heracles - Little Athletics Results</h3>
             <h4>Age Group Members</h4>
             <p>Coming soon...</p>
+        </div>
     </div>
     <div class="row row-content" ng-if="loggedIn && kind==('PARENT')">
         <div class="col-xs-12">
             <h3>Little Heracles - Little Athletics Results</h3>
             <h4>Personal Bests for each child</h4>
             <p>Coming soon...</p>
+        </div>
     </div>
     <div class="row row-content" ng-if="loggedIn && kind==('ATHLETE')">
         <div class="col-xs-12">
             <h3>Little Heracles - Little Athletics Results</h3>
             <h4>Personal Bests</h4>
-            <p>Coming soon...</p>
+            <div ng-repeat="personalBest in personalBests">
+            <p>{{personalBest.eventName}}, {{personalBest.distance}}</p>
+        </div>
+        </div>
     </div>
 </div>

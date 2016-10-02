@@ -7,13 +7,15 @@
             </ul>
         </div>
     </div>
-    <div class="row row-content" ng-show="showNextComp">
+    <div class="row row-content" ng-show="showNextComp" ng-if="loggedIn">
         <div class="col-xs-12">
         <h3>Upcoming Competition: {{nextComp.date | date:'dd-MM-yyyy'}}</h3>
-        <a ui-sref="app.resultsEntry" class="btn btn-Info" role="button">Record results for this competition</a>
+        <a ui-sref="app.resultsEntry" class="btn btn-info" role="button" ng-if="loggedIn && (kind=='CLUBOFFICIAL' || kind=='AGEMANAGER' || kind=='PARENT')">
+        Record results for this competition</a>
         <h4>Events</h4>
-        <div ng-repeat="event in nextComp.events | orderBy: 'ageGroup'">
-            <p>{{event.ageGroup}}, {{event.name}}</p>
+        <div ng-repeat="event in (orderedEvents = (nextComp.events | orderBy: 'ageGroup'))">
+            <h4 ng-if="orderedEvents[$index-1].ageGroup !== event.ageGroup">{{event.ageGroup}}</h4>
+            <p>{{event.name}}</p>
         </div>
         </div>
     </div>

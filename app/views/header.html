@@ -9,27 +9,11 @@
                         <a ui-sref="app.register">Register/Edit Users</a></li>
                     <li ng-class="{active: stateis('app.competitions')}" ng-if="loggedIn">
                         <a ui-sref="app.competitions" ng-if="loggedIn && kind=='CLUBOFFICIAL'">Competitions</a>
-                        <a ui-sref="app.competitions" ng-if="loggedIn && kind==('PARENT' || 'ATHLETE' || 'AGEMANAGER')">Upcoming Events</a>
+                        <a ui-sref="app.competitions" ng-if="loggedIn && (kind=='PARENT' || kind=='ATHLETE' || kind=='AGEMANAGER')">Upcoming Events</a>
                     </li>
                     <li ng-class="{active: stateis('app.results')}" ng-if="loggedIn">
                         <a ui-sref="app.results">Results</a></li>
                 </ul>
-                <!-- <ul ng-if="loggedIn && kind==('AGEMANAGER')" class="nav navbar-nav">
-                    <li ng-class="{active: stateis('app')}">
-                        <a ui-sref="app"><span class="glyphicon glyphicon-home"aria-hidden="true"></span> Home</a></li>
-                    <li ng-class="{active: stateis('app.ap.results')}">
-                        <a ui-sref="app.ap.results">Results</a></li>
-                    <li ng-class="{active: stateis('app.competitions')}">
-                        <a ui-sref="app.competitions">Upcoming Events</a></li>
-                </ul>
-                <ul ng-if="loggedIn && kind==('PARENT' || 'ATHLETE')" class="nav navbar-nav">
-                    <li ng-class="{active: stateis('app')}">
-                        <a ui-sref="app"><span class="glyphicon glyphicon-home"aria-hidden="true"></span> Home</a></li>
-                    <li ng-class="{active: stateis('app.ap.results')}">
-                        <a ui-sref="app.ap.results">Results</a></li>
-                    <li ng-class="{active: stateis('app.competitions')}">
-                        <a ui-sref="app.competitions">Upcoming Events</a></li>
-                </ul> -->
                 <ul class="nav navbar-nav navbar-right">
                     <li ng-if="!loggedIn"><a ng-click="openLogin()">
                     <span class="glyphicon glyphicon-log-in"></span> Login</a>

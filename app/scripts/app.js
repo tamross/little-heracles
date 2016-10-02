@@ -120,7 +120,7 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'/*, 'ang
                 views: {
                     'content@': {
                         templateUrl : 'views/results/results.html',
-                        controller  : 'ResultsController'
+                        controller  : 'PBController'
                     }
                 }
             })

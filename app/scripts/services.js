@@ -32,6 +32,7 @@ angular.module('littleHeraclesApp')
     var isAuthenticated = false;
     var username = '';
     var kind = '';
+    var id = '';
     var authToken = undefined;
     
 
@@ -52,6 +53,7 @@ angular.module('littleHeraclesApp')
     username = credentials.username;
     authToken = credentials.token;
     kind = credentials.kind;
+    id = credentials.id;
  
     // Set the token as header for your requests!
     $http.defaults.headers.common['x-access-token'] = authToken;
@@ -61,6 +63,7 @@ angular.module('littleHeraclesApp')
     authToken = undefined;
     username = '';
     kind = '';
+    id = '';
     isAuthenticated = false;
     $http.defaults.headers.common['x-access-token'] = authToken;
     $localStorage.remove(TOKEN_KEY);
@@ -71,7 +74,7 @@ angular.module('littleHeraclesApp')
         $resource(baseURL + "users/login")
         .save(loginData,
            function(response) {
-              storeUserCredentials({username:loginData.username, token: response.token, kind: response.kind});
+              storeUserCredentials({username:loginData.username, token: response.token, kind: response.kind, id: response.id});
               $rootScope.$broadcast('login:Successful');
               console.log("login successful");
            },
@@ -134,6 +137,10 @@ angular.module('littleHeraclesApp')
         return kind;  
     };
 
+    authFac.getId = function() {
+        return id;  
+    };
+
     loadUserCredentials();
     
     return authFac;
@@ -162,9 +169,13 @@ angular.module('littleHeraclesApp')
       return $resource(baseURL + "users/athletes/ageGroup/" + ageGroup, null);
     };
 
+    userFac.getAthlete = function(athleteId) {
+      return $resource(baseURL + "users/allUsers/" + athleteId, null);
+    };
+
     userFac.personalBests = function(athleteId) {
       return $resource(baseURL + "users/athletes/personalBests/" + athleteId, null);
-    };
+    }
 
     return userFac;
 }])

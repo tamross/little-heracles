@@ -3,30 +3,51 @@
 
 angular.module('littleHeraclesApp')
 
-.controller('HomeController', ['$scope', 'ngDialog', 'AuthFactory', function ($scope, ngDialog, AuthFactory) {
+.controller('HomeController', ['$scope', 'ngDialog', 'AuthFactory', 'UserFactory', function ($scope, ngDialog, AuthFactory, UserFactory) {
     $scope.loggedIn = false;
     $scope.username = '';
     $scope.kind = '';
+    $scope.id = '';
     
     if(AuthFactory.isAuthenticated()) {
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     }
     $scope.$on('login:Successful', function () {
         $scope.loggedIn = AuthFactory.isAuthenticated();
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     });
     $scope.$on('logout', function() {
         $scope.loggedIn = false;
         $scope.username = '';
         $scope.kind = '';
+        $scope.id = '';
     });
 
     $scope.openLogin = function () {
         ngDialog.open({ template: 'views/login.html', scope: $scope, className: 'ngdialog-theme-default', controller:"LoginController" });
     };
+
+    if ($scope.kind == 'ATHLETE') {
+        // Fetch the athlete's PBs
+        UserFactory.getAthlete($scope.id).get(
+            function(response) {
+                $scope.personalBests = response.personalBests;
+                console.log("Athlete has " + $scope.personalBests.length + " PBs");
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
+    }
+    if ($scope.kind == 'PARENT') {
+        // Fetch the PBs for all of their children
+    }
         
 }])
 
@@ -52,21 +73,25 @@ angular.module('littleHeraclesApp')
     $scope.loggedIn = false;
     $scope.username = '';
     $scope.kind = '';
+    $scope.id = '';
     
     if(AuthFactory.isAuthenticated()) {
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     }
     $scope.$on('login:Successful', function () {
         $scope.loggedIn = AuthFactory.isAuthenticated();
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     });
     $scope.$on('logout', function() {
         $scope.loggedIn = false;
         $scope.username = '';
         $scope.kind = '';
+        $scope.id = '';
         $location.path('/');
     });
         
@@ -95,21 +120,25 @@ angular.module('littleHeraclesApp')
     $scope.loggedIn = false;
     $scope.username = '';
     $scope.kind = '';
+    $scope.id = '';
     
     if(AuthFactory.isAuthenticated()) {
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     }
     $scope.$on('login:Successful', function () {
         $scope.loggedIn = AuthFactory.isAuthenticated();
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     });
     $scope.$on('logout', function() {
         $scope.loggedIn = false;
         $scope.username = '';
         $scope.kind = '';
+        $scope.id = '';
     });
     
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
@@ -117,6 +146,7 @@ angular.module('littleHeraclesApp')
     $scope.showChildren = false;
     $scope.showRegistrationSuccessful = false;
 
+    $scope.registration = {};
     $scope.doRegister = function(kind) {
         $scope.registration.kind = kind;
         AuthFactory.register($scope.registration);
@@ -159,30 +189,36 @@ angular.module('littleHeraclesApp')
     $scope.loggedIn = false;
     $scope.username = '';
     $scope.kind = '';
+    $scope.id = '';
     
     if(AuthFactory.isAuthenticated()) {
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     }
     $scope.$on('login:Successful', function () {
         $scope.loggedIn = AuthFactory.isAuthenticated();
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     });
     $scope.$on('logout', function() {
         $scope.loggedIn = false;
         $scope.username = '';
         $scope.kind = '';
+        $scope.id = '';
     });
 
     // After a competition is created we use the ID to retreive it and view it.
     $scope.compId = $stateParams.compId;
+    console.log("compid " + $scope.compId);
     $scope.compToShow = {};
     if ($scope.compId) {
         CompFactory.getCompetition($scope.compId).get(
             function(response) {
                 $scope.compToShow = response;
+                console.log("Competition has " + $scope.compToShow.events.length + " events");
             },
             function(response) {
                 console.log("Error: " + response.status + " " + response.statusText);
@@ -263,22 +299,25 @@ angular.module('littleHeraclesApp')
     $scope.loggedIn = false;
     $scope.username = '';
     $scope.kind = '';
+    $scope.id = '';
     
     if(AuthFactory.isAuthenticated()) {
         $scope.loggedIn = true;
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     }
     $scope.$on('login:Successful', function () {
         $scope.loggedIn = AuthFactory.isAuthenticated();
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
     });
     $scope.$on('logout', function() {
         $scope.loggedIn = false;
         $scope.username = '';
         $scope.kind = '';
-
+        $scope.id = '';
     });
 
     $scope.showCreationSuccessful = false;
@@ -342,7 +381,7 @@ angular.module('littleHeraclesApp')
         );
     }
 
-        $scope.saveResult = function() {
+    $scope.saveResult = function() {
         console.log("Saving result ");
         var max = Math.max($scope.attempts.attempt1, $scope.attempts.attempt2, $scope.attempts.attempt3);
         var result = {
@@ -432,5 +471,49 @@ angular.module('littleHeraclesApp')
              });
     };
 
+}])    
+
+.controller('PBController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 'ResultFactory',
+    function ($scope, ngDialog, $localStorage, AuthFactory, UserFactory,  ResultFactory) {
+    $scope.loggedIn = false;
+    $scope.username = '';
+    $scope.kind = '';
+    $scope.id = '';
+    
+    if(AuthFactory.isAuthenticated()) {
+        $scope.loggedIn = true;
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
+    }
+    $scope.$on('login:Successful', function () {
+        $scope.loggedIn = AuthFactory.isAuthenticated();
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+        $scope.id = AuthFactory.getId();
+    });
+    $scope.$on('logout', function() {
+        $scope.loggedIn = false;
+        $scope.username = '';
+        $scope.kind = '';
+        $scope.id = '';
+    });
+
+    if ($scope.kind == 'ATHLETE') {
+        // Fetch the athlete's PBs
+        UserFactory.getAthlete($scope.id).get(
+            function(response) {
+                $scope.personalBests = response.personalBests;
+                console.log("Athlete has " + $scope.personalBests.length + " PBs");
+            },
+            function(response) {
+                console.log("Error: " + response.status + " " + response.statusText);
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
+    }
+    if ($scope.kind == 'PARENT') {
+        // Fetch the PBs for all of their children
+    }
 }])    
 ;

@@ -1,9 +1,10 @@
 <div class="container">  
     <div class="row row-content">
-	    <h3>Competition {{compToShow.date}}</h3>
+	    <h3>Competition {{compToShow.date | date:'dd-MM-yyyy'}}</h3>
 	    <h4>Events</h4>
-	    <div ng-repeat="event in compToShow.events | orderBy: 'ageGroup'">
-	    	<p>{{event.ageGroup}}, {{event.name}}</p>
-	    </div>
+        <div ng-repeat="event in (orderedEvents = (compToShow.events | orderBy: 'ageGroup'))">
+            <h4 ng-if="orderedEvents[$index-1].ageGroup !== event.ageGroup">{{event.ageGroup}}</h4>
+            <p>{{event.name}}</p>
+        </div>
     </div>
 </div>
