@@ -2,8 +2,8 @@
 'use strict';
 
 angular.module('littleHeraclesApp')
- .constant("baseURL", "https://localhost:3443/")
-//.constant("baseURL", "https://little-heracles-server.au-syd.mybluemix.net/")
+ //.constant("baseURL", "https://localhost:3443/")
+.constant("baseURL", "https://little-heracles.au-syd.mybluemix.net/")
 .factory('$localStorage', ['$window', function ($window) {
     return {
         store: function (key, value) {
