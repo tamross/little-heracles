@@ -78,14 +78,13 @@ angular.module('littleHeraclesApp')
            function(response){
               isAuthenticated = false;
             
-              var message = '\
-                <div class="ngdialog-message">\
-                <div><h3>Login Unsuccessful</h3></div>' +
+              var message = '<div class="ngdialog-message">' +
+                '<div><h3>Login Unsuccessful</h3></div>' +
                   '<div><p>' +  response.data.err.message + '</p><p>' +
                     response.data.err.name + '</p></div>' +
-                '<div class="ngdialog-buttons">\
-                    <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click=confirm("OK")>OK</button>\
-                </div>';
+                '<div class="ngdialog-buttons">' +
+                    '<button type="button" class="ngdialog-button ngdialog-button-primary" ng-click=confirm("OK")>OK</button>' +
+                '</div>';
             
                 ngDialog.openConfirm({ template: message, plain: 'true'});
            }
@@ -98,6 +97,7 @@ angular.module('littleHeraclesApp')
         $resource(baseURL + "users/logout").get(function(response){
         });
         destroyUserCredentials();
+        $rootScope.$broadcast('logout');
     };
     
     authFac.register = function(registerData) {
@@ -110,9 +110,8 @@ angular.module('littleHeraclesApp')
            },
            function(response){
             
-              var message = '\
-                <div class="ngdialog-message">\
-                <div><h3>Registration Unsuccessful</h3></div>' +
+              var message = '<div class="ngdialog-message">' +
+                '<div><h3>Registration Unsuccessful</h3></div>' +
                   '<div><p>' +  response.data.err.message + 
                   '</p><p>' + response.data.err.name + '</p></div>';
 
@@ -165,7 +164,7 @@ angular.module('littleHeraclesApp')
 
     userFac.personalBests = function(athleteId) {
       return $resource(baseURL + "users/athletes/personalBests/" + athleteId, null);
-    }
+    };
 
     return userFac;
 }])

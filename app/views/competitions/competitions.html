@@ -10,7 +10,7 @@
     <div class="row row-content" ng-show="showNextComp">
         <div class="col-xs-12">
         <h3>Upcoming Competition: {{nextComp.date | date:'dd-MM-yyyy'}}</h3>
-        <button type="button" class="btn btn-info">Record results for this competition</button>
+        <a ui-sref="app.resultsEntry" class="btn btn-Info" role="button">Record results for this competition</a>
         <h4>Events</h4>
         <div ng-repeat="event in nextComp.events | orderBy: 'ageGroup'">
             <p>{{event.ageGroup}}, {{event.name}}</p>
@@ -20,8 +20,8 @@
     <div class="row row-content">
         <div class="col-xs-12">
             <h3>Previous Competitions</h3>
-            <p>show comp details of last competition</p>
-            <a href="#">Show more - paged results??</a>
+            <p>Coming soon...</p>
+            <!-- <a href="#">Show more - paged results??</a> -->
         </div>
     </div>
 </div>

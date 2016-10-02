@@ -1,8 +1,8 @@
 /*jslint node: true */
 'use strict';
 
-angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog', 'angular-momentjs'])
-.config(function($stateProvider, $urlRouterProvider, $momentProvider) {
+angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog'/*, 'angular-momentjs'*/])
+.config(function($stateProvider, $urlRouterProvider/*, $momentProvider*/) {
         $stateProvider  
             // route for the home page
             .state('app', {
@@ -116,10 +116,19 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog', 'angul
                 }
             })
             .state('app.results', {
-                url:'results',
+                url:'results/results',
                 views: {
                     'content@': {
                         templateUrl : 'views/results/results.html',
+                        controller  : 'ResultsController'
+                    }
+                }
+            })
+            .state('app.resultsEntry', {
+                url:'results/entry',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/results/resultsEntry.html',
                         controller  : 'ResultsController'
                     }
                 }
@@ -133,10 +142,28 @@ angular.module('littleHeraclesApp', ['ui.router','ngResource','ngDialog', 'angul
                     }
                 }
             })
+            .state('app.about', {
+                url:'about',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/about.html',
+                        controller  : 'HomeController'
+                    }
+                }
+            })
+            .state('app.contact', {
+                url:'contact',
+                views: {
+                    'content@': {
+                        templateUrl : 'views/contact.html',
+                        controller  : 'HomeController'
+                    }
+                }
+            })
             ;
     
         $urlRouterProvider.otherwise('/');
 
-        $momentProvider.asyncLoading(false).scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
+        // $momentProvider.asyncLoading(false).scriptUrl('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js');
     })
 ;

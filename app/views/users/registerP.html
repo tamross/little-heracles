@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="row row-content">
+    <div class="row row-content" ng-if="loggedIn && kind=='CLUBOFFICIAL'">
         <div class="col-xs-12">
             <h3>Register New Parent</h3>
             <form ng-submit="doRegister('PARENT')">

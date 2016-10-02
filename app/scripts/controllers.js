@@ -3,9 +3,31 @@
 
 angular.module('littleHeraclesApp')
 
-.controller('HomeController', ['$scope', function ($scope) {
+.controller('HomeController', ['$scope', 'ngDialog', 'AuthFactory', function ($scope, ngDialog, AuthFactory) {
+    $scope.loggedIn = false;
+    $scope.username = '';
+    $scope.kind = '';
+    
+    if(AuthFactory.isAuthenticated()) {
+        $scope.loggedIn = true;
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    }
+    $scope.$on('login:Successful', function () {
+        $scope.loggedIn = AuthFactory.isAuthenticated();
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    });
+    $scope.$on('logout', function() {
+        $scope.loggedIn = false;
+        $scope.username = '';
+        $scope.kind = '';
+    });
 
-    $scope.message = "Loading ...";
+    $scope.openLogin = function () {
+        ngDialog.open({ template: 'views/login.html', scope: $scope, className: 'ngdialog-theme-default', controller:"LoginController" });
+    };
+        
 }])
 
 .controller('LoginController', ['$scope', 'ngDialog', '$localStorage', 'AuthFactory', function ($scope, ngDialog, $localStorage, AuthFactory) {
@@ -24,7 +46,8 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('HeaderController', ['$scope', '$state', '$rootScope', 'ngDialog', 'AuthFactory', function ($scope, $state, $rootScope, ngDialog, AuthFactory) {
+.controller('HeaderController', ['$scope', '$state', '$rootScope', '$location', 'ngDialog', 'AuthFactory', 
+    function ($scope, $state, $rootScope, $location, ngDialog, AuthFactory) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -35,6 +58,17 @@ angular.module('littleHeraclesApp')
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
     }
+    $scope.$on('login:Successful', function () {
+        $scope.loggedIn = AuthFactory.isAuthenticated();
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    });
+    $scope.$on('logout', function() {
+        $scope.loggedIn = false;
+        $scope.username = '';
+        $scope.kind = '';
+        $location.path('/');
+    });
         
     $scope.openLogin = function () {
         ngDialog.open({ template: 'views/login.html', scope: $scope, className: 'ngdialog-theme-default', controller:"LoginController" });
@@ -47,11 +81,7 @@ angular.module('littleHeraclesApp')
         $scope.kind = '';
     };
     
-    $rootScope.$on('login:Successful', function () {
-        $scope.loggedIn = AuthFactory.isAuthenticated();
-        $scope.username = AuthFactory.getUsername();
-        $scope.kind = AuthFactory.getKind();
-    });
+
     
     $scope.stateis = function(curstate) {
        return $state.is(curstate);  
@@ -61,6 +91,26 @@ angular.module('littleHeraclesApp')
 
 .controller('RegisterController', ['$scope', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'UserFactory', 'AgeGroupFactory',
     function ($scope, $location, ngDialog, $localStorage, AuthFactory, UserFactory, AgeGroupFactory) {
+
+    $scope.loggedIn = false;
+    $scope.username = '';
+    $scope.kind = '';
+    
+    if(AuthFactory.isAuthenticated()) {
+        $scope.loggedIn = true;
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    }
+    $scope.$on('login:Successful', function () {
+        $scope.loggedIn = AuthFactory.isAuthenticated();
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    });
+    $scope.$on('logout', function() {
+        $scope.loggedIn = false;
+        $scope.username = '';
+        $scope.kind = '';
+    });
     
     $scope.validAgeGroups = AgeGroupFactory.getValidAgeGroups();
     $scope.showParents = false;
@@ -103,8 +153,8 @@ angular.module('littleHeraclesApp')
     
 }])
 
-.controller('CompetitionController', ['$scope', '$stateParams', '$location', 'ngDialog', '$localStorage', '$moment', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
-    function ($scope, $stateParams, $location, ngDialog, $localStorage, $moment, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
+.controller('CompetitionController', ['$scope', '$stateParams', '$location', 'ngDialog', '$localStorage', 'AuthFactory', 'CompFactory', 'EventFactory', 'AgeGroupFactory',
+    function ($scope, $stateParams, $location, ngDialog, $localStorage, AuthFactory, CompFactory, EventFactory, AgeGroupFactory) {
 
     $scope.loggedIn = false;
     $scope.username = '';
@@ -115,6 +165,16 @@ angular.module('littleHeraclesApp')
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
     }
+    $scope.$on('login:Successful', function () {
+        $scope.loggedIn = AuthFactory.isAuthenticated();
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    });
+    $scope.$on('logout', function() {
+        $scope.loggedIn = false;
+        $scope.username = '';
+        $scope.kind = '';
+    });
 
     // After a competition is created we use the ID to retreive it and view it.
     $scope.compId = $stateParams.compId;
@@ -160,9 +220,8 @@ angular.module('littleHeraclesApp')
     $scope.createCompetition = function() {
         console.log("creating comp");
 
-        var validationMessage = '\
-                    <div class="ngdialog-message">\
-                    <div><h3>Competition Creation Unsuccessful</h3></div>' +
+        var validationMessage = '<div class="ngdialog-message">' +
+                    '<div><h3>Competition Creation Unsuccessful</h3></div>' +
                       '<p>You must select some events.</p>';
 
         var comp = {date: $scope.competition.date, events: []};
@@ -182,9 +241,8 @@ angular.module('littleHeraclesApp')
                      },
                      function(response){
                       
-                        var message = '\
-                          <div class="ngdialog-message">\
-                          <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                        var message = '<div class="ngdialog-message">' +
+                          '<div><h3>Competition Creation Unsuccessful</h3></div>' +
                             '<div><p>' +  response.data.err.message + 
                             '</p><p>' + response.data.err.name + '</p></div>';
                           ngDialog.openConfirm({ template: message, plain: 'true'});
@@ -211,6 +269,17 @@ angular.module('littleHeraclesApp')
         $scope.username = AuthFactory.getUsername();
         $scope.kind = AuthFactory.getKind();
     }
+    $scope.$on('login:Successful', function () {
+        $scope.loggedIn = AuthFactory.isAuthenticated();
+        $scope.username = AuthFactory.getUsername();
+        $scope.kind = AuthFactory.getKind();
+    });
+    $scope.$on('logout', function() {
+        $scope.loggedIn = false;
+        $scope.username = '';
+        $scope.kind = '';
+
+    });
 
     $scope.showCreationSuccessful = false;
     $scope.createdResultId = ''; // This will contain the id of the last successfully created result so we can link to view it.
@@ -271,7 +340,7 @@ angular.module('littleHeraclesApp')
                 $scope.message = "Error: " + response.status + " " + response.statusText;
             }
         );
-    };
+    }
 
         $scope.saveResult = function() {
         console.log("Saving result ");
@@ -286,7 +355,7 @@ angular.module('littleHeraclesApp')
 
         //See if it is a personal bext for the athlete
         var existingPb = {"eventName": $scope.currentEvent.name, "distance":0};
-        if ($scope.currentAthlete.personalBests == null) {
+        if ($scope.currentAthlete.personalBests === null) {
             // Handle accidental nulls in the database
             $scope.currentAthlete.personalBests = [];
         }
@@ -295,18 +364,17 @@ angular.module('littleHeraclesApp')
             if (pb.eventName == $scope.currentEvent.name) {
                 console.log("PB for " + pb.eventName + " is " + pb.distance);
                 existingPb = {"eventName": pb.eventName, "distance": pb.distance};
-            };
+            }
         }
+        var message = '';
         if (max > existingPb.distance) {
-            var message = '\
-                  <div class="ngdialog-message">\
-                  <div><p>This is a new personal best for ' + $scope.currentAthlete.name + '!</p>\
-                  <p>Previous PB: ' + existingPb + ', new PB: ' + max + '</p></div>';
+            message = '<div class="ngdialog-message">' +
+                  '<div><p>This is a new personal best for ' + $scope.currentAthlete.name + '!</p>' +
+                  '<p>Previous PB: ' + existingPb + ', new PB: ' + max + '</p></div>';
                   ngDialog.openConfirm({ template: message, plain: 'true'});
         } else if (max == existingPb.distance) {
-            var message = '\
-                  <div class="ngdialog-message">\
-                  <div><p>' + $scope.currentAthlete.name + ' has matched their personal best!</p></div>';
+            message = '<div class="ngdialog-message">' +
+                  '<div><p>' + $scope.currentAthlete.name + ' has matched their personal best!</p></div>';
                   ngDialog.openConfirm({ template: message, plain: 'true'});
         }
 
@@ -319,7 +387,7 @@ angular.module('littleHeraclesApp')
                 // If it's a new PB replace the old PB on the user
                     if (max > existingPb.distance) {
                         console.log("should be updating the list of pbs");
-                        if (existingPb.distance == 0) {
+                        if (existingPb.distance === 0) {
                             // It's a brand new event PB
                             existingPb.distance = max;
                             $scope.currentAthlete.personalBests.push(existingPb);
@@ -340,9 +408,8 @@ angular.module('littleHeraclesApp')
                              },
                              function(response){
                               
-                                var message = '\
-                                  <div class="ngdialog-message">\
-                                  <div><h3>Saving Personal Bests Unsuccessful</h3></div>' +
+                                var message = '<div class="ngdialog-message">' +
+                                  '<div><h3>Saving Personal Bests Unsuccessful</h3></div>' +
                                     '<div><p>' +  response.data.err.message + 
                                     '</p><p>' + response.data.err.name + '</p></div>';
                                   ngDialog.openConfirm({ template: message, plain: 'true'});
@@ -357,9 +424,8 @@ angular.module('littleHeraclesApp')
              },
              function(response){
               
-                var message = '\
-                  <div class="ngdialog-message">\
-                  <div><h3>Competition Creation Unsuccessful</h3></div>' +
+                var message = '<div class="ngdialog-message">' +
+                  '<div><h3>Competition Creation Unsuccessful</h3></div>' +
                     '<div><p>' +  response.data.err.message + 
                     '</p><p>' + response.data.err.name + '</p></div>';
                   ngDialog.openConfirm({ template: message, plain: 'true'});

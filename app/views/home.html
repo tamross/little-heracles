@@ -1,25 +1,41 @@
 
 <div class="container">
-    <div class="row row-content">
+    <div class="row row-content" ng-if="!loggedIn">
         <div class="col-xs-12">
-            <h3>Login </h3>
-            <form ng-submit="doLogin()">
-                <div class="form-group">
-                    <label class="sr-only" for="username">Username</label>
-                    <input type="text" class="form-control input-sm" id="username" placeholder="Username" ng-model="loginData.username">
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="password">Password</label>
-                    <input type="password" class="form-control input-sm" id="password" placeholder="Password" ng-model="loginData.password">
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" ng-model="rememberMe"> Remember me
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-info btn-sm">Sign in</button>
-                <a ng-click=openRegister()>Click here to register</a>
-            </form>
+            <h3>Little Heracles - Little Athletics Results</h3>
+            <p>Heracles was a Greek God of strength, sports, athletes and health.</p>
+            <p>Little Heracles Results will make it easier to record and access little athletics results.</p>
+            <p>You must be logged in.</p>
+            <button type="button" class="btn btn-info" ng-click="openLogin()">
+                <span class="glyphicon glyphicon-log-in"></span> Login</button>
+                <p>If you need to register for an account or have forgotten your username or password, 
+                    please contact the administrator at
+                    <i class="fa fa-envelope"></i>: <a href="mailto:tamross@gmail.com<">tamross@gmail.com</a>
+                </p>
         </div>
+    </div>
+    <div class="row row-content" ng-if="loggedIn && kind==('CLUBOFFICIAL')">
+        <div class="col-xs-12">
+            <h3>Little Heracles - Little Athletics Results</h3>
+            <h4>Club Records</h4>
+            <p>Coming soon...</p>
+    </div>
+    <div class="row row-content" ng-if="loggedIn && kind==('AGEMANAGER')">
+        <div class="col-xs-12">
+            <h3>Little Heracles - Little Athletics Results</h3>
+            <h4>Age Group Members</h4>
+            <p>Coming soon...</p>
+    </div>
+    <div class="row row-content" ng-if="loggedIn && kind==('PARENT')">
+        <div class="col-xs-12">
+            <h3>Little Heracles - Little Athletics Results</h3>
+            <h4>Personal Bests for each child</h4>
+            <p>Coming soon...</p>
+    </div>
+    <div class="row row-content" ng-if="loggedIn && kind==('ATHLETE')">
+        <div class="col-xs-12">
+            <h3>Little Heracles - Little Athletics Results</h3>
+            <h4>Personal Bests</h4>
+            <p>Coming soon...</p>
     </div>
 </div>
